@@ -7,6 +7,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate
 
+
 class RegisterView(APIView):    
     def post(self, request, format=None):
         serializer = RegiterSerializer(data=request.data)
@@ -30,7 +31,6 @@ class LoginView(APIView):
                 return Response({"error": "Invalid Credentials..!"}, status=status.HTTP_401_UNAUTHORIZED)    
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             
-        
 
 class CustomUserViewSet(viewsets.ModelViewSet):
     
@@ -45,15 +45,14 @@ class CustomUserViewSet(viewsets.ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-class projectViewSet(viewsets.ModelViewSet):
+class ProjectViewSet(viewsets.ModelViewSet):
 
     serializer_class = projectSerializer
     permission_classes = [CanCreateProjectPermission]
 
     def create(self, request, *args, **kwargs):
-        request.data['projectCreator'] = request.user.id
-        serializer = projectViewSet(data=request.data)
+        request.data['ProjectCreator'] = request.user.id
+        serializer = ProjectViewSet(data=request.data)
         if serializer.is_valid():   
 
             serializer.save()
@@ -61,5 +60,7 @@ class projectViewSet(viewsets.ModelViewSet):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+class ResetPasswordEmailRequestSerializer(APIView):
+    def post(self, *args, **kwargs):
+        pass
 
