@@ -97,3 +97,5 @@ class Project(models.Model):
     projectName = models.CharField(max_length=50)
     projectDescription = models.CharField(max_length=500)
     projectStartDate = models.DateField(default=now)
+    projectEndDate = models.DateField(null=True)
+    toDo = models.CharField(max_length=100, choices=(('In progress', 'In progress'),('Completed', 'Completed'))) 

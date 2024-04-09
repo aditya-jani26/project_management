@@ -1,6 +1,7 @@
 from django.contrib import admin
-from department.models import *
+from .models import CustomUser,Project
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+
 # Register your models here.
 
 class UserModelAdmin(BaseUserAdmin):
@@ -9,9 +10,9 @@ class UserModelAdmin(BaseUserAdmin):
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
     list_display = ["id", "email", "name", "userType", "is_admin"]
-    list_filter = ["is_admin"]
+    list_filter = ["is_admin",]
     fieldsets = [
-        ('User Credential', {"fields": ["email", "password"]}),
+        ('User Credentials', {"fields": ["email", "password"]}),
         ("Personal info", {"fields": ["name", "userType"]}),
         ("Permissions", {"fields": ["is_admin"]}),
     ]
@@ -22,7 +23,7 @@ class UserModelAdmin(BaseUserAdmin):
             None,
             {
                 "classes": ["wide"],
-                "fields": ["email", "name", "userType", "password1", "password2"],
+                "fields": ["email", "name", "userType", "password1", "confirmPass"],
             },
         ),
     ]
