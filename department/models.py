@@ -1,6 +1,8 @@
 from django.db import models
+from django.forms import ValidationError
 from django.utils.timezone import now
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Create your models here.
 
@@ -64,12 +66,22 @@ class CustomUser(AbstractBaseUser):
     name = models.CharField(max_length=50)
     userType = models.CharField(max_length=100, choices=(('Admin', 'Admin'),('Project-Manager', 'Project-Manager'),('Team-Leader', 'Team-Leader'),('Employee', 'Employee'))) 
     is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)   
+    is_admin = models.BooleanField(default=False)
+    allocation = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)]) 
+
 
     objects = CustomUserManager()
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["name", "userType"]
+    def save(self, *args, **kwargs):
+        if self.is_admin:
+            existing_admins = CustomUser.objects.filter(is_admin=True).count()
+            if existing_admins > 0:
+                raise ValidationError("There can only be one admin user.")  
+            if self.userType == 'Employee' and self.allocation > 100:
+                raise ValidationError("Employee allocation cannot exceed 100%.")
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.email

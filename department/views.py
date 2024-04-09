@@ -100,8 +100,6 @@ class ResetPassword(APIView):
             return Response({'msg':'password Reset link send. Plase check your email inbox'},status= status.HTTP_200_OK)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        pass
-
  
 class TokenRefreshAPIView(APIView):
     pass 

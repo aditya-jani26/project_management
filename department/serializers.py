@@ -45,7 +45,7 @@ class RegisterSerializer(serializers.HyperlinkedModelSerializer):
 
         
 class LoginSerializer(serializers.ModelSerializer):
-    email=serializers.EmailField(max_langth=255)
+    email = serializers.EmailField(max_length=255)
     class Meta:
         model=CustomUser
         fields=("email","password")
